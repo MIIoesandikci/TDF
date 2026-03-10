@@ -1,0 +1,163 @@
+<mvc:View
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:c="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:l="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:ui="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:u="sap.ui.unified"
+    xmlns:tnt="sap.tnt"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    height="100%"
+    controllerName="HurdaKompozisyonHazirlamaEkrani.controller.Main">
+    <App id="idMainApp" autoFocus="false">
+        <pages>
+            <Page id="idMainPage" title="{i18n>title}" enableScrolling="false">
+                <content>
+                    <l:Grid defaultSpan="XL6 L6 M12 S12" class="equalHeightGrid">
+                        <!-- PANEL A -->
+                        <Panel id="idPanelA" backgroundDesign="Solid" class="sapUiTinyMargin layoutPanel compactPanel" height="100%" width="auto">
+                            <form:SimpleForm class="compactForm" layout="ColumnLayout" columnsXL="3" columnsL="3" columnsM="2">
+                                <form:content>
+                                    <Label text="{i18n>label_disa_workplace}" />
+                                    <Select forceSelection="false" selectedKey="{viewModel>/panelA/disaIsYeri}" items="{viewModel>/disaList}" change=".onDisaListSelectChange">
+                                        <core:Item key="{viewModel>key}" text="{viewModel>text}" />
+                                    </Select>
+
+                                    <Label text="{i18n>label_furnace}" />
+                                    <Select forceSelection="false" selectedKey="{viewModel>/panelA/ergitmeOcagi}" items="{viewModel>/filteredErgitmeList}" change=".onFilteredErgitmeListSelectChange" enabled="{= ${viewModel>/filteredErgitmeList}.length > 0 }">
+                                        <core:Item key="{viewModel>key}" text="{viewModel>text}" />
+                                    </Select>
+
+                                    <Label text="{i18n>label_order}" />
+                                    <Input value="{viewModel>/panelA/sira}" enabled="false" />
+
+                                    <Label text="{i18n>label_materialCode_description}" />
+                                    <ComboBox selectedKey="{viewModel>/panelA/malzemeKodu}" items="{viewModel>/malzemeList}" change=".onMaterialListComboBoxChange">
+                                        <core:Item key="{viewModel>kodu}" text="{viewModel>kodu} - {viewModel>aciklama}" />
+                                    </ComboBox>
+
+                                    <Label text="{i18n>label_unit}" />
+                                    <Input value="{viewModel>/panelA/birim}" enabled="false" />
+
+                                    <Label text="{i18n>label_plannedAmount}" />
+                                    <Input value="{viewModel>/panelA/planliMiktar}" liveChange=".onPlannedAmountInputLiveChange" />
+                                </form:content>
+                            </form:SimpleForm>
+                            <OverflowToolbar design="Transparent" height="4rem">
+                                <ToolbarSpacer />
+                                <Button text="{i18n>button_save}" type="Accept" icon="sap-icon://save" width="120px" press="onSaveButtonPress" />
+                            </OverflowToolbar>
+                        </Panel>
+
+                        <!-- PANEL C -->
+                        <Panel id="idPanelC" backgroundDesign="Solid" class="sapUiTinyMargin layoutPanel compactPanel" height="100%" width="auto">
+                            <form:SimpleForm class="compactForm" layout="ColumnLayout" columnsXL="2" columnsL="2" columnsM="2">
+                                <form:content>
+                                    <Label text="{i18n>label_disa_workplace}" />
+                                    <Select forceSelection="false" selectedKey="{viewModel>/panelC/disaIsYeri}" items="{viewModel>/disaList}" change=".onDisaListSelectPanelCChange">
+                                        <core:Item key="{viewModel>key}" text="{viewModel>text}" />
+                                    </Select>
+
+                                    <Label text="{i18n>label_furnace}" />
+                                    <Select forceSelection="false" selectedKey="{viewModel>/panelC/ergitmeOcagi}" items="{viewModel>/filteredErgitmeListC}" change=".onFilteredErgitmeListCSelectChange" enabled="{= ${viewModel>/filteredErgitmeListC}.length > 0 }">
+                                        <core:Item key="{viewModel>key}" text="{viewModel>text}" />
+                                    </Select>
+                                </form:content>
+                            </form:SimpleForm>
+
+                            <ScrollContainer height="100%" vertical="true" horizontal="false" class="flexScrollContainer">
+                                <Table items="{viewModel>/panelC/tableData}" keyboardMode="Navigation" sticky="ColumnHeaders,HeaderToolbar">
+                                    <headerToolbar>
+                                        <Toolbar>
+                                            <Title text="{i18n>panelC_preview_title}" level="H4" />
+                                            <ToolbarSpacer />
+                                            <Text text="{= ${i18n>panelC_total_scrap_prefix} + ': ' + ${viewModel>/panelC/toplamMiktar} + ' ' + ${i18n>unit_kg} }" />
+                                        </Toolbar>
+                                    </headerToolbar>
+                                    <columns>
+                                        <Column>
+                                            <Text text="{i18n>label_order}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>column_material_description}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>label_plannedAmount}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>label_unit}" />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{viewModel>sira}" />
+                                                <Text text="{viewModel>malzemeAciklamasi}" />
+                                                <Text text="{viewModel>planliMiktar}" />
+                                                <Text text="{viewModel>birim}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+                        </Panel>
+                    </l:Grid>
+
+                    <l:Grid defaultSpan="XL12 L12 M12 S12">
+                        <!-- PANEL B -->
+                        <Panel id="idPanelB" backgroundDesign="Solid" class="sapUiTinyMargin bottomPanel" height="auto" width="auto">
+                            <ScrollContainer height="100%" vertical="true" horizontal="false" class="flexScrollContainerBottom">
+                                <Table id="idTableDataPanelBTable" items="{viewModel>/panelB/tableData}" mode="SingleSelectLeft" keyboardMode="Navigation" sticky="ColumnHeaders,HeaderToolbar">
+                                    <columns>
+                                        <Column>
+                                            <Text text="{i18n>label_furnace}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>label_order}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>column_material_code}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>column_description}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>label_plannedAmount}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>label_unit}" />
+                                        </Column>
+                                        <Column>
+                                            <Text text="{i18n>label_user}" />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <Text text="{viewModel>ergitmeOcagi}" />
+                                                <Text text="{viewModel>sira}" />
+                                                <Text text="{viewModel>malzemeKodu}" />
+                                                <Text text="{viewModel>aciklama}" />
+                                                <Text text="{viewModel>planliMiktar}" />
+                                                <Text text="{viewModel>birim}" />
+                                                <Text text="{viewModel>kullanici}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+                            <Toolbar design="Transparent" height="4rem" class="bottomPanelToolbar">
+                                <ToolbarSpacer />
+                                <Button text="{i18n>button_edit}" type="Emphasized" icon="sap-icon://edit" width="120px" press="onEditButtonPress" />
+                                <Button text="{i18n>button_delete}" type="Reject" icon="sap-icon://delete" width="120px" press="onDeleteButtonPress" />
+                            </Toolbar>
+                        </Panel>
+                    </l:Grid>
+                </content>
+            </Page>
+        </pages>
+    </App>
+</mvc:View>
