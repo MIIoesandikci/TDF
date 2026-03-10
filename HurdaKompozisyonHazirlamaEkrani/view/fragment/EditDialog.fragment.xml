@@ -1,0 +1,35 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+    <Dialog title="{i18n>dialog_edit_title}" contentWidth="400px">
+        <content>
+            <form:SimpleForm editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="4" labelSpanM="12" labelSpanS="12">
+                <form:content>
+                    <Label text="{i18n>label_furnace}" />
+                    <Input value="{editModel>/ergitmeOcagi}" enabled="false" />
+
+                    <Label text="{i18n>label_order}" />
+                    <Input value="{editModel>/sira}" enabled="false" />
+
+                    <Label text="{i18n>label_materialCode_description}" />
+                    <ComboBox selectedKey="{editModel>/malzemeKodu}" items="{viewModel>/malzemeList}">
+                        <core:Item key="{viewModel>kodu}" text="{viewModel>kodu} - {viewModel>aciklama}" />
+                    </ComboBox>
+
+                    <Label text="{i18n>label_plannedAmount}" />
+                    <Input value="{editModel>/planliMiktar}" liveChange=".onPlannedAmountInputLiveChange" />
+
+                    <Label text="{i18n>label_unit}" />
+                    <Input value="{editModel>/birim}" enabled="false" />
+
+                    <Label text="{i18n>label_user}" />
+                    <Input value="{editModel>/kullanici}" enabled="false" />
+                </form:content>
+            </form:SimpleForm>
+        </content>
+        <beginButton>
+            <Button text="{i18n>button_save}" width="100px" icon="sap-icon://save" type="Accept" press=".onEditDialogSaveButtonPress" />
+        </beginButton>
+        <endButton>
+            <Button text="{i18n>button_cancel}" width="100px" icon="sap-icon://cancel" type="Reject" press=".onEditDialogCancelButtonPress" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

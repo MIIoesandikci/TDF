@@ -1,0 +1,93 @@
+/* Custom full-screen layout strictly for Large Screens (Desktop) */
+@media (min-width: 1024px) {
+    /* Global kaydırma çubuğunu engelle ve gövdeyi sıfırla */
+    html,
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+
+    .equalHeightGrid {
+        display: flex !important;
+        align-items: stretch;
+        height: 335px; /* Fit Panel A form and Kaydet button without scrolling */
+    }
+
+    .equalHeightGrid > div {
+        display: flex;
+        flex-wrap: wrap; /* required for Grid items */
+    }
+
+    /* Ensure the Panel itself expands */
+    .equalHeightGrid .layoutPanel {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Expand the inner scroll container of the Panel if needed */
+    .equalHeightGrid .layoutPanel .sapMPanelContent {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bottomPanel {
+        display: flex;
+        flex-direction: column;
+        /* Üstteki 335px + başlıklar, marginler (toplam ~445px) çıkarıldıktan 
+           sonra kalan alanı alt panele ayırır, böylece dış scroll oluşmaz */
+        height: calc(100vh - 445px) !important;
+    }
+
+    .bottomPanel .sapMPanelContent {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 0;
+    }
+
+    .flexScrollContainerBottom {
+        flex-grow: 1;
+        height: 0;
+        min-height: 0 !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+/* Ensure ScrollContainers still behave correctly inside Panels if flex is not active */
+.flexScrollContainer {
+    flex-grow: 1;
+    min-height: 100px;
+}
+
+/* Küçük ekranlarda (paneller alt alta dizildiğinde) sayfanın kaymasına izin veriyoruz */
+@media (max-width: 1023px) {
+    .sapMPageContainer,
+    .sapMPage {
+        overflow-y: auto !important;
+    }
+    .bottomPanel {
+        height: auto !important;
+        margin-bottom: 20px;
+    }
+}
+
+/* Daha az iç boşluk için yeni sınıflar - GLOBAL UYGULA */
+.compactPanel .sapMPanelContent {
+    padding: 0.5rem !important; /* 1rem (16px) yerine 8px padding */
+}
+
+.compactForm .sapUiFormElement {
+    margin-bottom: 2px !important; /* Form elemanları arasındaki devasa boşluğu kapatır */
+}
+
+.bottomPanelToolbar {
+    margin-top: 8px !important; /* Tablo ile butonlar arasındaki istenen boşluk */
+}
+
+.sapUiFormCLContainer {
+    padding: 0rem 0.75rem !important;
+}
